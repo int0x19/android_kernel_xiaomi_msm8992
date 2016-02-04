@@ -1378,8 +1378,6 @@ static int f2fs_write_data_pages(struct address_space *mapping,
 	int ret;
 	long diff;
 
-	trace_f2fs_writepages(mapping->host, wbc, DATA);
-
 	/* deal with chardevs and other special file */
 	if (!mapping->a_ops->writepage)
 		return 0;
@@ -1396,6 +1394,8 @@ static int f2fs_write_data_pages(struct address_space *mapping,
 	/* during POR, we don't need to trigger writepage at all. */
 	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
 		goto skip_write;
+
+	trace_f2fs_writepages(mapping->host, wbc, DATA);
 
 	diff = nr_pages_to_write(sbi, DATA, wbc);
 
@@ -1415,6 +1415,7 @@ static int f2fs_write_data_pages(struct address_space *mapping,
 
 skip_write:
 	wbc->pages_skipped += get_dirty_pages(inode);
+	trace_f2fs_writepages(mapping->host, wbc, DATA);
 	return 0;
 }
 
