@@ -49,12 +49,6 @@ config IOSCHED_ZEN
  	---help---
  	FCFS, dispatches are back-inserted, deadlines ensure fairness.
          Should work best with devices where there is no travel delay.
-+config IOSCHED_ZEN
- 	tristate "Zen I/O scheduler"
- 	default y
- 	---help---
- 	FCFS, dispatches are back-inserted, deadlines ensure fairness.
-         Should work best with devices where there is no travel delay.
 
 config IOSCHED_CFQ
 	tristate "CFQ I/O scheduler"
