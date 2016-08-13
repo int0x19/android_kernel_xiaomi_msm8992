@@ -88,7 +88,7 @@ config CPU_FREQ_DEFAULT_GOV_USERSPACE
 config CPU_FREQ_DEFAULT_GOV_ONDEMAND
 	bool "ondemand"
 	select CPU_FREQ_GOV_ONDEMAND
-	select CPU_FREQ_GOV_PERFORMANCE
+
 	help
 	  Use the CPUFreq governor 'ondemand' as default. This allows
 	  you to get a full dynamic frequency capable system by simply
@@ -100,7 +100,6 @@ config CPU_FREQ_DEFAULT_GOV_ONDEMAND
 config CPU_FREQ_DEFAULT_GOV_CONSERVATIVE
 	bool "conservative"
 	select CPU_FREQ_GOV_CONSERVATIVE
-	select CPU_FREQ_GOV_PERFORMANCE
 	help
 	  Use the CPUFreq governor 'conservative' as default. This allows
 	  you to get a full dynamic frequency capable system by simply
@@ -203,7 +202,7 @@ config CPU_FREQ_GOV_ELEMENTALX
 	  If in doubt, say N. 
 	  
 config CPU_FREQ_GOV_ALUCARD
-	tristate "'elementalx' cpufreq policy governor"
+	tristate "'alucard' cpufreq policy governor"
 	help
 	  'alucard' - This driver adds a dynamic cpufreq policy governor
 	  designed for latency-sensitive workloads.
