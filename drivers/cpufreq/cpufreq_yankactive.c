@@ -133,8 +133,8 @@ static bool io_is_busy = 0;
  * sync_freq
  */
 static unsigned int up_threshold_any_cpu_load = 90;
-static unsigned int sync_freq = 1574400;
-static unsigned int up_threshold_any_cpu_freq = 1574400;
+static unsigned int sync_freq = 1440000;
+static unsigned int up_threshold_any_cpu_freq = 1440000;
 
 static void cpufreq_yankactive_timer_resched(
 	struct cpufreq_yankactive_cpuinfo *pcpu)
