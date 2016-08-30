@@ -159,6 +159,11 @@ config CPU_FREQ_DEFAULT_GOV_BLUACTIVE
 	help
 	Use the CPUFreq governor 'bluactive' as default.
 
+config CPU_FREQ_DEFAULT_GOV_DESPAIR
+	bool "despair"
+	select CPU_FREQ_GOV_DESPAIR
+	help
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -354,6 +359,10 @@ config CPU_FREQ_GOV_BLUACTIVE
 	help
 	  'bluactive' - less aggressive version of interactive
 
+config CPU_FREQ_GOV_DESPAIR
+	tristate "'despair' cpufreq governor"
+	depends on CPU_FREQ
+	
 config CPU_BOOST
 	tristate "Event base short term CPU freq boost"
 	depends on CPU_FREQ
