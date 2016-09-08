@@ -43,6 +43,12 @@
 #include <linux/of_gpio.h>
 #include <linux/regulator/consumer.h>
 #include <linux/wakelock.h>
+
+#ifdef CONFIG_MSM_HOTPLUG
+#include <linux/msm_hotplug.h>
+#include <linux/workqueue.h>
+#endif
+
 #include <linux/spi/spi.h>
 #include <soc/qcom/scm.h>
 
@@ -50,6 +56,10 @@
 #define FPC1020_RESET_HIGH1_US 100
 #define FPC1020_RESET_HIGH2_US 1250
 #define FPC_TTW_HOLD_TIME 1000
+
+#ifdef CONFIG_MSM_HOTPLUG
+extern void msm_hotplug_resume_timeout(void);
+#endif
 
 static const char * const pctl_names[] = {
 	"spi12_fpc_active",
@@ -428,6 +438,14 @@ static const struct attribute_group attribute_group = {
 	.attrs = attributes,
 };
 
+#ifdef CONFIG_MSM_HOTPLUG
+static void msm_hotplug_resume_call(struct work_struct *msm_hotplug_resume_call_work)
+{
+	msm_hotplug_resume_timeout();
+}
+static DECLARE_WORK(msm_hotplug_resume_call_work, msm_hotplug_resume_call);
+#endif
+
 static irqreturn_t fpc1020_irq_handler(int irq, void *handle)
 {
 	struct fpc1020_data *fpc1020 = handle;
@@ -439,6 +457,13 @@ static irqreturn_t fpc1020_irq_handler(int irq, void *handle)
 	if (fpc1020->wakeup_enabled) {
 		wake_lock_timeout(&fpc1020->ttw_wl, msecs_to_jiffies(FPC_TTW_HOLD_TIME));
 		/*dev_info(fpc1020->dev, "%s - wake_lock_timeout\n", __func__);*/
+#ifdef CONFIG_MSM_HOTPLUG
+		if (msm_enabled && msm_hotplug_scr_suspended &&
+		   !msm_hotplug_fingerprint_called) {
+			msm_hotplug_fingerprint_called = true;
+			schedule_work(&msm_hotplug_resume_call_work);
+		}
+#endif
 	}
 
 	input_event(fpc1020->idev, EV_MSC, MSC_SCAN, ++fpc1020->irq_num);
